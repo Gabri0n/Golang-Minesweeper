@@ -5,12 +5,16 @@ import (
 	"math/rand/v2"
 )
 
+// Cell Object
+
 type Cell struct {
 	bomb          bool
 	revealed      bool
 	flagged       bool
 	adjacentBombs int
 }
+
+// Main Function, calls all other functions
 
 func main() {
 
@@ -23,6 +27,8 @@ func main() {
 
 }
 
+// Builds the field from the supplied size
+
 func build_field(matrix_size int) [][]Cell {
 
 	matrix := make([][]Cell, matrix_size)
@@ -33,6 +39,8 @@ func build_field(matrix_size int) [][]Cell {
 
 	return matrix
 }
+
+// Adds bombs randomly to the field
 
 func add_bombs(bomb_count int, matrix [][]Cell) [][]Cell {
 
@@ -51,6 +59,8 @@ func add_bombs(bomb_count int, matrix [][]Cell) [][]Cell {
 
 	return matrix
 }
+
+// Find the adjacent bomb count for each cell
 
 func count_bombs(matrix [][]Cell) [][]Cell {
 
@@ -71,21 +81,27 @@ func count_bombs(matrix [][]Cell) [][]Cell {
 						if matrix[new_x][new_y].bomb {
 							count++
 						}
-
 					}
-
 				}
 
 				matrix[x][y].adjacentBombs = count
 				count = 0
 			}
 		}
-
 	}
 
 	return matrix
 
 }
+
+// Flood fill alogrithm when selecting empty cell
+
+func flood_fill(matrix [][]Cell, xpos int, ypos int) [][]Cell {
+
+	return matrix
+}
+
+// Render field for debugging
 
 func render_field(matrix [][]Cell) {
 	for _, row := range matrix {
