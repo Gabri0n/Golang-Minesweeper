@@ -2,6 +2,8 @@
 
 package main
 
+// Reveal all bombs on selection of one
+
 func bomb_selected(matrix [][]Cell) [][]Cell {
 
 	for x := 0; x < len(matrix); x++ {

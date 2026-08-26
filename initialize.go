@@ -7,12 +7,16 @@ import (
 	"math/rand/v2"
 )
 
+// Cell object
+
 type Cell struct {
 	bomb          bool
 	revealed      bool
 	flagged       bool
 	adjacentBombs int
 }
+
+// Initialize the playing field
 
 func initialize_field(bomb_count int, matrix_size int) [][]Cell {
 
