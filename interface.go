@@ -9,7 +9,7 @@ import (
 	"github.com/rivo/tview"
 )
 
-func drawBoard(table *tview.Table, matrix [][]Cell) {
+func draw_board(table *tview.Table, matrix [][]Cell) {
 	for x, row := range matrix {
 		for y, val := range row {
 			color := tcell.ColorWhite
@@ -55,7 +55,7 @@ func render_tui(matrix [][]Cell) {
 	table.SetSelectedStyle(tcell.StyleDefault.Foreground(tcell.ColorBlack).Background(tcell.ColorRed))
 	table.SetSelectable(true, true)
 
-	drawBoard(table, matrix)
+	draw_board(table, matrix)
 	table.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		x, y := table.GetSelection()
 
@@ -64,14 +64,18 @@ func render_tui(matrix [][]Cell) {
 		case 'f': // flag
 			if !matrix[x][y].revealed {
 				matrix[x][y].flagged = true
-				drawBoard(table, matrix)
+				draw_board(table, matrix)
 			}
 			return nil
 
 		case ' ':
-			if !matrix[x][y].flagged && !matrix[x][y].revealed {
+			if matrix[x][y].bomb {
+				matrix = bomb_selected(matrix)
+				draw_board(table, matrix)
+
+			} else if !matrix[x][y].flagged && !matrix[x][y].revealed {
 				matrix = flood_fill(matrix, x, y)
-				drawBoard(table, matrix)
+				draw_board(table, matrix)
 			}
 			return nil
 		}

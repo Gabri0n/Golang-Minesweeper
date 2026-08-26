@@ -2,6 +2,21 @@
 
 package main
 
+func bomb_selected(matrix [][]Cell) [][]Cell {
+
+	for x := 0; x < len(matrix); x++ {
+		for y := 0; y < len(matrix[0]); y++ {
+			if matrix[x][y].bomb {
+				matrix[x][y].revealed = true
+			}
+
+		}
+
+	}
+
+	return matrix
+}
+
 // Flood fill alogrithm when selecting empty cell
 
 func flood_fill(matrix [][]Cell, xpos int, ypos int) [][]Cell {

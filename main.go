@@ -6,13 +6,10 @@ package main
 
 func main() {
 
-	var matrix_size int = 25
-	var bomb_count int = 50
+	var matrix_size int = 50
+	var bomb_count int = 250
 
 	matrix := initialize_field(bomb_count, matrix_size)
-	// render_field(matrix)
-	// matrix = flood_fill(matrix, 15, 15)
-	// render_field(matrix)
 
 	render_tui(matrix)
 }
