@@ -1,6 +1,6 @@
 // Initialization of the game field
 
-package golang_minesweeper
+package main
 
 import (
 	"fmt"

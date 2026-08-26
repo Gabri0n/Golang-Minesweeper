@@ -1,6 +1,6 @@
 // Game Functions
 
-package golang_minesweeper
+package main
 
 // Flood fill alogrithm when selecting empty cell
 
