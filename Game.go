@@ -13,6 +13,8 @@ type Game struct {
 	EndTime     time.Time
 }
 
+// Initialize a Game
+
 func NewGame() *Game {
 
 	return &Game{
@@ -20,6 +22,8 @@ func NewGame() *Game {
 		State:  "Menu",
 	}
 }
+
+// Start a Game
 
 func (g *Game) StartGame() {
 
@@ -34,11 +38,15 @@ func (g *Game) StartGame() {
 
 }
 
+// Update the timer
+
 func (g *Game) UpdateTimer() {
 
 	g.ElapsedTime = time.Since(g.StartTime)
 
 }
+
+// Check the status of the Game
 
 func (g *Game) CheckStatus() {
 

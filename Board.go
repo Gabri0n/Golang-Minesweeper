@@ -16,7 +16,7 @@ type Board struct {
 	isLost        bool
 }
 
-// Build a board
+// Initialize a Board
 
 func NewBoard(Size, MineCount int) *Board {
 
@@ -63,6 +63,8 @@ func (b *Board) Select(x int, y int) {
 
 }
 
+// Toggle cell flag at position
+
 func (b *Board) FlagCell(x int, y int) {
 
 	if !b.Cells[x][y].isRevealed && !b.Cells[x][y].isFlagged {
@@ -75,6 +77,8 @@ func (b *Board) FlagCell(x int, y int) {
 	}
 
 }
+
+// Check if the game is Won
 
 func (b *Board) CheckWin() {
 
