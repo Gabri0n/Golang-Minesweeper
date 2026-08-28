@@ -11,6 +11,7 @@ type Board struct {
 	Cells     [][]Cell
 	Size      int
 	MineCount int
+	FlagCount int
 	isWon     bool
 	isLost    bool
 }
@@ -54,6 +55,19 @@ func (b *Board) Select(x int, y int) {
 
 		b.FloodFill(x, y)
 
+	}
+
+}
+
+func (b *Board) FlagCell(x int, y int) {
+
+	if !b.Cells[x][y].isRevealed && !b.Cells[x][y].isFlagged {
+		b.Cells[x][y].ToggleFlagged()
+		b.FlagCount++
+
+	} else if !b.Cells[x][y].isRevealed && b.Cells[x][y].isFlagged {
+		b.Cells[x][y].ToggleFlagged()
+		b.FlagCount--
 	}
 
 }

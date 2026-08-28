@@ -19,8 +19,6 @@ func (c *Cell) SetRevealed() {
 
 func (c *Cell) ToggleFlagged() {
 
-	if !c.isRevealed {
-		c.isFlagged = !c.isFlagged
-	}
+	c.isFlagged = !c.isFlagged
 
 }

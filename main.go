@@ -6,10 +6,11 @@ package main
 
 func main() {
 
-	var Size int = 50
-	var MineCount int = 250
+	//var Size int = 50
+	//var MineCount int = 250
 
-	b := NewBoard(Size, MineCount)
+	g := NewGame()
+	g.StartGame()
 
-	RenderTui(b)
+	RenderTui(g)
 }
