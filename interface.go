@@ -9,30 +9,30 @@ import (
 	"github.com/rivo/tview"
 )
 
-func draw_board(table *tview.Table, matrix [][]Cell) {
-	for x, row := range matrix {
+func DrawBoard(table *tview.Table, board *Board) {
+	for x, row := range board.Cells {
 		for y, val := range row {
 			color := tcell.ColorWhite
 
 			var text string
 			switch {
-			case val.flagged: // Flag
+			case val.isFlagged: // Flag
 				text = "?"
 				color = tcell.ColorPurple
 
-			case val.bomb && !val.revealed: // Unrevealed Bomb
+			case val.isMine && !val.isRevealed: // Unrevealed Bomb
 				text = "#"
 				color = tcell.ColorWhite
 
-			case val.bomb: // Revealed Bomb
+			case val.isMine: // Revealed Bomb
 				text = "*"
 				color = tcell.ColorRed
 
-			case val.revealed && val.adjacentBombs > 0: // Adjacent Bomb Count
+			case val.isRevealed && val.adjacentBombs > 0: // Adjacent Bomb Count
 				text = strconv.Itoa(val.adjacentBombs)
 				color = tcell.ColorYellow
 
-			case val.revealed: // Revealed Empty Cell
+			case val.isRevealed: // Revealed Empty Cell
 				text = " "
 				color = tcell.ColorBlack
 
@@ -47,7 +47,7 @@ func draw_board(table *tview.Table, matrix [][]Cell) {
 	}
 }
 
-func render_tui(matrix [][]Cell) {
+func RenderTui(board *Board) {
 
 	app := tview.NewApplication()
 	table := tview.NewTable().SetBorders(false).SetSeparator(' ')
@@ -55,28 +55,24 @@ func render_tui(matrix [][]Cell) {
 	table.SetSelectedStyle(tcell.StyleDefault.Foreground(tcell.ColorBlack).Background(tcell.ColorRed))
 	table.SetSelectable(true, true)
 
-	draw_board(table, matrix)
+	DrawBoard(table, board)
 	table.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		x, y := table.GetSelection()
 
 		switch event.Rune() {
 
 		case 'f': // flag
-			if !matrix[x][y].revealed {
-				matrix[x][y].flagged = true
-				draw_board(table, matrix)
-			}
+			board.Cells[x][y].ToggleFlagged()
+
+			DrawBoard(table, board)
+
 			return nil
 
 		case ' ':
-			if matrix[x][y].bomb {
-				matrix = bomb_selected(matrix)
-				draw_board(table, matrix)
+			board.Select(x, y)
 
-			} else if !matrix[x][y].flagged && !matrix[x][y].revealed {
-				matrix = flood_fill(matrix, x, y)
-				draw_board(table, matrix)
-			}
+			DrawBoard(table, board)
+
 			return nil
 		}
 
@@ -85,7 +81,7 @@ func render_tui(matrix [][]Cell) {
 			return nil
 		}
 
-		return event // arrows, Esc, etc. fall through to the table
+		return event
 	})
 
 	if err := app.SetRoot(table, true).SetFocus(table).Run(); err != nil {

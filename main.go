@@ -6,10 +6,10 @@ package main
 
 func main() {
 
-	var matrix_size int = 50
-	var bomb_count int = 250
+	var Size int = 50
+	var MineCount int = 250
 
-	matrix := initialize_field(bomb_count, matrix_size)
+	b := NewBoard(Size, MineCount)
 
-	render_tui(matrix)
+	RenderTui(b)
 }
