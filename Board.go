@@ -7,12 +7,13 @@ import (
 )
 
 type Board struct {
-	Cells     [][]Cell
-	Size      int
-	MineCount int
-	FlagCount int
-	isWon     bool
-	isLost    bool
+	Cells         [][]Cell
+	Size          int
+	MineCount     int
+	FlagCount     int
+	RevealedCount int
+	isWon         bool
+	isLost        bool
 }
 
 // Build a board
@@ -29,6 +30,8 @@ func NewBoard(Size, MineCount int) *Board {
 		Cells:     Cells,
 		Size:      Size,
 		MineCount: MineCount,
+		isWon:     false,
+		isLost:    false,
 	}
 
 	Board.AddMines(MineCount, Board.Cells)
@@ -49,10 +52,12 @@ func (b *Board) Select(x int, y int) {
 	case b.Cells[x][y].isMine:
 
 		b.RevealMines(b.Cells)
+		b.isLost = true
 
 	case !b.Cells[x][y].isFlagged && !b.Cells[x][y].isRevealed:
 
 		b.FloodFill(x, y)
+		b.CheckWin()
 
 	}
 
@@ -67,6 +72,14 @@ func (b *Board) FlagCell(x int, y int) {
 	} else if !b.Cells[x][y].isRevealed && b.Cells[x][y].isFlagged {
 		b.Cells[x][y].ToggleFlagged()
 		b.FlagCount--
+	}
+
+}
+
+func (b *Board) CheckWin() {
+
+	if b.RevealedCount >= b.Size*b.Size-b.MineCount {
+		b.isWon = true
 	}
 
 }
@@ -151,6 +164,7 @@ func (b *Board) FloodFill(xpos int, ypos int) [][]Cell {
 	}
 
 	b.Cells[xpos][ypos].isRevealed = true
+	b.RevealedCount++
 	queue := []point{{xpos, ypos}}
 
 	for front := 0; front < len(queue); front++ {
@@ -175,11 +189,12 @@ func (b *Board) FloodFill(xpos int, ypos int) [][]Cell {
 
 			if b.Cells[new_x][new_y].adjacentBombs > 0 {
 				b.Cells[new_x][new_y].isRevealed = true
+				b.RevealedCount++
 				continue
 			}
 
 			b.Cells[new_x][new_y].isRevealed = true
-
+			b.RevealedCount++
 			queue = append(queue, point{new_x, new_y})
 
 		}

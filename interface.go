@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -36,7 +37,7 @@ func RenderTui(game *Game) {
 
 	// Header bar
 
-	Header := tview.NewTextView().SetText("FLAGS HERE							TIMER HERE").SetTextColor(tcell.ColorWhite).SetTextAlign(tview.AlignCenter).SetScrollable(false)
+	Header := tview.NewTextView().SetText("Flags: 00		Status: Playing		Time: 0s").SetTextColor(tcell.ColorWhite).SetTextAlign(tview.AlignCenter).SetScrollable(false)
 	Header.ScrollToBeginning()
 	Header.SetBorder(true).SetTitle(" Golang Minesweeper ")
 
@@ -85,16 +86,19 @@ func RenderTui(game *Game) {
 
 		case ' ':
 			game.Board.Select(x, y)
+			game.CheckStatus()
 			DrawBoard(Table, game)
 			DrawHeader(Header, game)
 			return nil
 		}
 
+		return event
+	})
+
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
 			app.Stop()
-			return nil
 		}
-
 		return event
 	})
 
@@ -118,6 +122,30 @@ func RenderTui(game *Game) {
 		return false
 	})
 
+	// Go routine to update timer in background
+
+	go func() {
+		ticker := time.NewTicker(time.Second)
+		defer ticker.Stop()
+
+		for range ticker.C {
+
+			if game.State == "Won" || game.State == "Lost" {
+				app.QueueUpdateDraw(func() {
+					Table.SetSelectable(false, false)
+					app.SetFocus(Header)
+					DrawHeader(Header, game)
+				})
+
+				return
+			}
+
+			app.QueueUpdateDraw(func() {
+				DrawHeader(Header, game)
+			})
+		}
+	}()
+
 	if err := app.SetRoot(boxContainer, true).SetFocus(Table).Run(); err != nil {
 		panic(err)
 	}
@@ -131,7 +159,7 @@ func DrawHeader(Header *tview.TextView, game *Game) {
 
 	game.UpdateTimer()
 
-	var HeaderText = fmt.Sprintf("Flags: %s							Time: %.1fs", HeaderFlags, game.ElapsedTime.Seconds())
+	var HeaderText = fmt.Sprintf("Flags: %s		Status: %s		Time: %.0fs", HeaderFlags, game.State, game.ElapsedTime.Seconds())
 
 	Header.SetText(HeaderText).SetTextColor(tcell.ColorWhite).SetTextAlign(tview.AlignCenter).SetScrollable(false)
 	Header.ScrollToBeginning()

@@ -10,6 +10,7 @@ type Game struct {
 	State       string
 	StartTime   time.Time
 	ElapsedTime time.Duration
+	EndTime     time.Time
 }
 
 func NewGame() *Game {
@@ -23,7 +24,7 @@ func NewGame() *Game {
 func (g *Game) StartGame() {
 
 	var Size int = 16
-	var MineCount int = 30
+	var MineCount int = 5
 
 	g.Board = NewBoard(Size, MineCount)
 
@@ -41,10 +42,13 @@ func (g *Game) UpdateTimer() {
 
 func (g *Game) CheckStatus() {
 
-	if g.State == "win" {
+	if g.Board.isWon {
 
-	} else {
+		g.State = "Won"
 
+	} else if g.Board.isLost {
+
+		g.State = "Lost"
 	}
 
 }
