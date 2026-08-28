@@ -3,7 +3,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand/v2"
 )
 
@@ -75,9 +74,6 @@ func (b *Board) FlagCell(x int, y int) {
 // Adds bombs randomly to the field
 
 func (b *Board) AddMines(bomb_count int, cell [][]Cell) [][]Cell {
-
-	fmt.Print("Bomb count = ", bomb_count)
-	fmt.Println()
 
 	for count := 0; count < bomb_count; {
 		var x = rand.IntN(len(cell))
@@ -170,6 +166,11 @@ func (b *Board) FloodFill(xpos int, ypos int) [][]Cell {
 
 			if b.Cells[new_x][new_y].isMine || b.Cells[new_x][new_y].isRevealed {
 				continue
+			}
+
+			if !b.Cells[new_x][new_y].isMine && b.Cells[new_x][new_y].isFlagged {
+				b.Cells[new_x][new_y].ToggleFlagged()
+				b.FlagCount--
 			}
 
 			if b.Cells[new_x][new_y].adjacentBombs > 0 {

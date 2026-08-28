@@ -2,23 +2,13 @@ Golang Minesweeper Todo:
 
 1. Add main menu screen
 2. Add game win / lose screen
-3. Add score
-4. Add scoreboard
-5. Add sound
-6. Make it pretty
+3. Add sound
+4. Make it pretty
 
 Make board a struct that contains the cells struct?
 
 let me store score and self contain functions such as the fill and bomb select
 
-7. Fix interface.go to not be so awful. 
+5. Fix interface.go to not be so awful. 
 
-Define a vertical flex
-
-	Make Header a horizontal flex
-	Make Field a horizontal flex
-		Make Vertical flex in Field
-			Place table in this Flex
-	
-	Header is fixed width
-	Field matches table size scaling vertically and horozontally
+6. Determine behavior for if flagged bombs get revealed in the end

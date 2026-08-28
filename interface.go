@@ -86,6 +86,7 @@ func RenderTui(game *Game) {
 		case ' ':
 			game.Board.Select(x, y)
 			DrawBoard(Table, game)
+			DrawHeader(Header, game)
 			return nil
 		}
 
@@ -141,7 +142,7 @@ func DrawHeader(Header *tview.TextView, game *Game) {
 
 func DrawBoard(table *tview.Table, game *Game) {
 	for x, row := range game.Board.Cells {
-		for y, val := range row {
+		for y, cell := range row {
 			color := tcell.ColorWhite
 			BackgroundColour := tcell.ColorDarkGrey
 
@@ -158,24 +159,24 @@ func DrawBoard(table *tview.Table, game *Game) {
 
 			var text string
 			switch {
-			case val.isFlagged: // Flag
+			case cell.isFlagged: // Flag
 				text = "?"
 				color = tcell.ColorRed
 
-			case val.isMine && !val.isRevealed: // Unrevealed Bomb
+			case cell.isMine && !cell.isRevealed: // Unrevealed Bomb
 				text = "#"
 				color = tcell.ColorWhite
 
-			case val.isMine: // Revealed Bomb
+			case cell.isMine: // Revealed Bomb
 				text = "*"
 				color = tcell.ColorBlack
 				BackgroundColour = tcell.ColorRed
 
-			case val.isRevealed && val.adjacentBombs > 0: // Adjacent Bomb Count
-				text = strconv.Itoa(val.adjacentBombs)
-				color = mineColors[val.adjacentBombs]
+			case cell.isRevealed && cell.adjacentBombs > 0: // Adjacent Bomb Count
+				text = strconv.Itoa(cell.adjacentBombs)
+				color = mineColors[cell.adjacentBombs]
 
-			case val.isRevealed: // Revealed Empty Cell
+			case cell.isRevealed: // Revealed Empty Cell
 				text = " "
 				color = tcell.ColorBlack
 
