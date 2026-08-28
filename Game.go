@@ -1,3 +1,5 @@
+// Game Struct and Functions
+
 package main
 
 import "time"

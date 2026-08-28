@@ -1,4 +1,4 @@
-// Game Functions
+// Board Struct and Functions
 
 package main
 

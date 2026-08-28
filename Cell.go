@@ -1,4 +1,4 @@
-// Initialization of the game field
+// Cell Struct and Functions
 
 package main
 
