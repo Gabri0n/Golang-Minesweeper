@@ -11,6 +11,8 @@ type Board struct {
 	Cells     [][]Cell
 	Size      int
 	MineCount int
+	isWon     bool
+	isLost    bool
 }
 
 // Build a board
@@ -35,6 +37,8 @@ func NewBoard(Size, MineCount int) *Board {
 	return Board
 }
 
+// Cell selection logic
+
 func (b *Board) Select(x int, y int) {
 
 	switch {
@@ -44,7 +48,7 @@ func (b *Board) Select(x int, y int) {
 
 	case b.Cells[x][y].isMine:
 
-		b.MineSelected(b.Cells)
+		b.RevealMines(b.Cells)
 
 	case !b.Cells[x][y].isFlagged && !b.Cells[x][y].isRevealed:
 
@@ -110,7 +114,7 @@ func (b *Board) CountMines(cell [][]Cell) [][]Cell {
 
 // Reveal all bombs on selection of one
 
-func (b *Board) MineSelected(cell [][]Cell) [][]Cell {
+func (b *Board) RevealMines(cell [][]Cell) [][]Cell {
 
 	for x := 0; x < len(cell); x++ {
 		for y := 0; y < len(cell[0]); y++ {
@@ -124,6 +128,8 @@ func (b *Board) MineSelected(cell [][]Cell) [][]Cell {
 
 	return cell
 }
+
+// Flood fill at given position
 
 func (b *Board) FloodFill(xpos int, ypos int) [][]Cell {
 
