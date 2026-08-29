@@ -75,7 +75,7 @@ func RenderTui(game *Game) {
 	// Start new game function
 
 	newGame := func() {
-		game.StartGame(25, 100)
+		game.StartGame(game.Board.Size, game.Board.MineCount)
 		Table.SetSelectable(true, true)
 		DrawBoard(Table, game)
 		DrawHeader(Header, game)
