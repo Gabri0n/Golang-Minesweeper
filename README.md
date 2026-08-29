@@ -29,11 +29,11 @@ go run . <Field Size> <Mine Count>
 ```
 
 
-| Control | Action  |   |   |   |
-|---------|---------|---|---|---|
-| Space   | Select  |   |   |   |
-| F       | Flag    |   |   |   |
-| Enter   | Restart |   |   |   |
+| Control | Action  |
+|---------|---------|
+| Space   | Select  |
+| F       | Flag    |
+| Enter   | Restart |
 
 
 
