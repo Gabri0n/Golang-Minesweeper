@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	size := 50
-	mineCount := 250
+	size := 16
+	mineCount := 30
 
 	args := os.Args[1:]
 
