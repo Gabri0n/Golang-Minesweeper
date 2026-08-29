@@ -48,11 +48,9 @@ func (g *Game) UpdateTimer() {
 func (g *Game) CheckStatus() {
 
 	if g.Board.isWon {
-
 		g.State = "Won"
 
 	} else if g.Board.isLost {
-
 		g.State = "Lost"
 	}
 

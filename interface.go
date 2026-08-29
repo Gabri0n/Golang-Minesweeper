@@ -72,6 +72,8 @@ func RenderTui(game *Game) {
 
 	boxContainer := tview.NewFlex().SetDirection(tview.FlexRow).AddItem(HeaderFlex, 3, 0, false).AddItem(OuterFieldFlex, 0, 1, true)
 
+	// Start new game function
+
 	newGame := func() {
 		game.StartGame(25, 100)
 		Table.SetSelectable(true, true)
@@ -104,13 +106,6 @@ func RenderTui(game *Game) {
 			return nil
 		}
 
-		return event
-	})
-
-	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Key() == tcell.KeyEscape {
-			app.Stop()
-		}
 		return event
 	})
 
