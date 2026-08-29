@@ -10,7 +10,7 @@ func main() {
 	//var MineCount int = 250
 
 	g := NewGame()
-	g.StartGame()
+	g.StartGame(25, 100)
 
 	RenderTui(g)
 }

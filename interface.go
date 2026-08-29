@@ -37,7 +37,7 @@ func RenderTui(game *Game) {
 
 	// Header bar
 
-	Header := tview.NewTextView().SetText("Flags: 00		Status: Playing		Time: 0s").SetTextColor(tcell.ColorWhite).SetTextAlign(tview.AlignCenter).SetScrollable(false)
+	Header := tview.NewTextView().SetText("Flags: 00		Status: Playing		Time: 0s").SetTextColor(tcell.ColorYellow).SetTextAlign(tview.AlignCenter).SetScrollable(false)
 	Header.ScrollToBeginning()
 	Header.SetBorder(true).SetTitle(" Golang Minesweeper ")
 
@@ -72,6 +72,14 @@ func RenderTui(game *Game) {
 
 	boxContainer := tview.NewFlex().SetDirection(tview.FlexRow).AddItem(HeaderFlex, 3, 0, false).AddItem(OuterFieldFlex, 0, 1, true)
 
+	newGame := func() {
+		game.StartGame(25, 100)
+		Table.SetSelectable(true, true)
+		DrawBoard(Table, game)
+		DrawHeader(Header, game)
+		app.SetFocus(Table)
+	}
+
 	DrawBoard(Table, game)
 	Table.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		x, y := Table.GetSelection()
@@ -89,6 +97,10 @@ func RenderTui(game *Game) {
 			game.CheckStatus()
 			DrawBoard(Table, game)
 			DrawHeader(Header, game)
+			if game.State == "Won" || game.State == "Lost" {
+				Table.SetSelectable(false, false)
+				app.SetFocus(Header)
+			}
 			return nil
 		}
 
@@ -98,6 +110,18 @@ func RenderTui(game *Game) {
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Key() == tcell.KeyEscape {
 			app.Stop()
+		}
+		return event
+	})
+
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyEscape:
+			app.Stop()
+			return nil
+		case tcell.KeyEnter:
+			newGame()
+			return nil
 		}
 		return event
 	})
@@ -127,19 +151,7 @@ func RenderTui(game *Game) {
 	go func() {
 		ticker := time.NewTicker(time.Second)
 		defer ticker.Stop()
-
 		for range ticker.C {
-
-			if game.State == "Won" || game.State == "Lost" {
-				app.QueueUpdateDraw(func() {
-					Table.SetSelectable(false, false)
-					app.SetFocus(Header)
-					DrawHeader(Header, game)
-				})
-
-				return
-			}
-
 			app.QueueUpdateDraw(func() {
 				DrawHeader(Header, game)
 			})
@@ -161,7 +173,7 @@ func DrawHeader(Header *tview.TextView, game *Game) {
 
 	var HeaderText = fmt.Sprintf("Flags: %s		Status: %s		Time: %.0fs", HeaderFlags, game.State, game.ElapsedTime.Seconds())
 
-	Header.SetText(HeaderText).SetTextColor(tcell.ColorWhite).SetTextAlign(tview.AlignCenter).SetScrollable(false)
+	Header.SetText(HeaderText).SetTextColor(tcell.ColorYellow).SetTextAlign(tview.AlignCenter).SetScrollable(false)
 	Header.ScrollToBeginning()
 
 }

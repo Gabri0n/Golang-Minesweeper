@@ -25,10 +25,7 @@ func NewGame() *Game {
 
 // Start a Game
 
-func (g *Game) StartGame() {
-
-	var Size int = 16
-	var MineCount int = 5
+func (g *Game) StartGame(Size int, MineCount int) {
 
 	g.Board = NewBoard(Size, MineCount)
 
@@ -41,9 +38,9 @@ func (g *Game) StartGame() {
 // Update the timer
 
 func (g *Game) UpdateTimer() {
-
-	g.ElapsedTime = time.Since(g.StartTime)
-
+	if g.State == "Playing" {
+		g.ElapsedTime = time.Since(g.StartTime)
+	}
 }
 
 // Check the status of the Game
